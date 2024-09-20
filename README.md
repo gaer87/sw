@@ -2,7 +2,7 @@
 
 ## Architecture
 
-### Design patterns
+### [Design patterns](https://github.com/gaer87/sw/tree/main/design-patterns)
 
 ### Microfrontends
 
