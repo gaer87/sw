@@ -2,15 +2,11 @@
 
 ```ts
 class OldPaymentProcessor {
-    private unionPayBalance: number;
-    private masterCardBalance: number;
-    private visaBalance: number;
-
-    constructor(unionPayBalance: number, masterCardBalance: number, visaBalance: number) {
-        this.unionPayBalance = unionPayBalance;
-        this.masterCardBalance = masterCardBalance;
-        this.visaBalance = visaBalance;
-    }
+    constructor(
+        private unionPayBalance: number,
+        private masterCardBalance: number,
+        private visaBalance: number,
+    ) {}
 
     // Метод для оплаты покупки, делённой на три части
     processPayment(totalAmount: number): void {
@@ -49,6 +45,8 @@ oldProcessor.processPayment(270);
 #### Проблема:
 > Вся логика оплаты находится в одном большом методе, что усложняет понимание кода. Добавление новой карты требует изменения внутри класса (нарушение принципа открытости/закрытости)
 
+> Проблема усугубляется, когда if'ы this.unionPayBalance >= partAmount и т.д встречаются и в других методах. Класс обрастает большим кол-вом if'ов, что усложняет поддержку и читаемость
+
 ## После
 
 ```ts
@@ -57,11 +55,7 @@ interface PaymentStrategy {
 }
 
 class UnionPay implements PaymentStrategy {
-    private balance: number;
-
-    constructor(balance: number) {
-        this.balance = balance;
-    }
+    constructor(private balance: number) {}
 
     pay(amount: number): boolean {
         if (this.balance >= amount) {
@@ -76,11 +70,7 @@ class UnionPay implements PaymentStrategy {
 }
 
 class MasterCard implements PaymentStrategy {
-    private balance: number;
-
-    constructor(balance: number) {
-        this.balance = balance;
-    }
+    constructor(private balance: number) {}
 
     pay(amount: number): boolean {
         if (this.balance >= amount) {
@@ -95,11 +85,7 @@ class MasterCard implements PaymentStrategy {
 }
 
 class Visa implements PaymentStrategy {
-    private balance: number;
-
-    constructor(balance: number) {
-        this.balance = balance;
-    }
+    constructor(private balance: number) {}
 
     pay(amount: number): boolean {
         if (this.balance >= amount) {
@@ -114,11 +100,7 @@ class Visa implements PaymentStrategy {
 }
 
 class PaymentProcessor {
-    private strategy: PaymentStrategy;
-
-    constructor(strategy: PaymentStrategy) {
-        this.strategy = strategy;
-    }
+    constructor(private strategy: PaymentStrategy) {}
 
     setStrategy(strategy: PaymentStrategy): void {
         this.strategy = strategy;
