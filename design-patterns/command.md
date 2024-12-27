@@ -63,9 +63,9 @@ class Application {
     public constructor(): void {
         this.app = new App()
 
-        this.okButton = new OkButton()
-        this.cancelButton = new CancelButton()
-        this.printButton = new PrintButton(this.getCheckedDoc())
+        this.okButton = new OkButton(this.app)
+        this.cancelButton = new CancelButton(this.app)
+        this.printButton = new PrintButton(this.app, this.getCheckedDoc())
 
         document.addEventListener('keydown', this.onKeyDown)
     }
