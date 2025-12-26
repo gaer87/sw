@@ -115,7 +115,7 @@ With dynamic lists, we can’t be sure the order is ever the same:
 ![img_12.png](img_12.png)
 
 If the list of our shopping items is ever re-ordered,
-React will see that all p and input elements inside have the same type,
+React will see that all `p` and `input` elements inside have the same type,
 and won’t know to move them. (From React’s point of view, the items themselves changed, not their order.)
 
 ![img_21.png](img_21.png)
