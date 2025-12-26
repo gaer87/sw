@@ -164,6 +164,7 @@ Okay, so what does React do when an element type is a function?
 
 This process continues recursively.
 
+```
 You: `ReactDOM.render(<App />, domContainer)`
 React: Hey `App`, what do you render to?
 App: I render `<Layout>` with `<Content>` inside.
@@ -174,7 +175,7 @@ Content: I render an `<article>` with some text and a `<Footer>` inside.
 React: Hey `<Footer>`, what do you render to?
 Footer: I render a `<footer>` with some more text.
 React: Okay, here you go:
-
+```
 ![img_19.png](img_19.png)
 
 This is why we say reconciliation is recursive. When React walks the element tree,
