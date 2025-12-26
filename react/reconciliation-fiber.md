@@ -115,8 +115,6 @@ If the list of our shopping items is ever re-ordered,
 React will see that all p and input elements inside have the same type,
 and won’t know to move them. (From React’s point of view, the items themselves changed, not their order.)
 
-![img_14.png](img_14.png)
-
 So instead of re-ordering them, React would effectively update each of them.
 This can create performance issues and possible bugs.
 For example, the content of the first input would stay reflected in first input after the sort
@@ -146,6 +144,7 @@ How do we use components from other components? Components are functions so we c
 However, this is not the idiomatic way to use components in the React runtime.
 
 Instead, the idiomatic way to use a component is with the same mechanism we’ve already seen before — React elements.
+
 **This means that you don’t directly call the component function, but instead let React later do it for you:**
 
 ![img_17.png](img_17.png)
@@ -155,6 +154,7 @@ And somewhere inside React, your component will be called:
 ![img_18.png](img_18.png)
 
 Okay, so what does React do when an element type is a function?
+
 **It calls your component, and asks what element that component wants to render.**
 
 This process continues recursively.
