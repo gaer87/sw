@@ -169,7 +169,7 @@ This process continues recursively.
 >>> App: I render `<Layout>` with `<Content>` inside.
 >> React: Hey `Layout`, what do you render to?
 >>>> Layout: I render my children in a `<div>`. My child was `<Content>` so I guess that goes into the `<div>`.
-React: Hey `<Content>`, what do you render to?
+>> React: Hey `<Content>`, what do you render to?
 >>>>> Content: I render an `<article>` with some text and a `<Footer>` inside.
 >> React: Hey `<Footer>`, what do you render to?
 >>>>>> Footer: I render a `<footer>` with some more text.
