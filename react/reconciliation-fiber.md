@@ -9,12 +9,14 @@ React programs usually output a tree that may change over time.
 It might be a DOM tree, aniOS hierarchy, a tree of PDF primitives, or even of JSON objects.
 However, usually, we want to represent some UI with it. We’ll call it a “host tree” because 
 it is a part of the host environment outside of React — like DOM or iOS.
-The host tree usually has its own imperative API. React is a layer on top of it.
+The host tree usually has its own imperative API.
+
+React is a layer on top of it.
 
 ### Host Instances
 The host tree consists of nodes. We’ll call them “host instances”. 
 In the DOM environment, host instances are regular DOM nodes — like the objects you get
-when you call document.createElement('div'). 
+when you call `document.createElement('div')`. 
 
 ### Renderers
 A renderer teaches React to talk to a specific host environment and manage its host instances.
@@ -23,6 +25,7 @@ React DOM, React Native, and even Ink are React renderers.
 ### React Elements
 In the host environment, a host instance (like a DOM node) is the smallest building block.
 In React, the smallest building block is a React element.
+
 A React element is a plain **JavaScript object**.
 
 ![img_8.png](img_8.png)
@@ -43,17 +46,17 @@ React DOM entry point is `ReactDOM.render`
 
 ![img_9.png](img_9.png)
 
-When we say ReactDOM.render(reactElement, domContainer),
+When we say `ReactDOM.render(reactElement, domContainer)`,
 we mean: “Dear React, make the domContainer host tree match my reactElement.”
 
-React will look at the reactElement.type (in our example, 'button') and
+React will look at the `reactElement.type` (in our example, 'button') and
 ask the React DOM renderer to create a host instance for it and set the properties:
 
 ![img_10.png](img_10.png)
 
 ![img_11.png](img_11.png)
 
-If the React element has child elements in reactElement.props.children,
+If the React element has child elements in `reactElement.props.children`,
 React will recursively create host instances for them too on the first render.
 
 ## Reconciliation (Согласование)
@@ -79,8 +82,8 @@ Instead, we want React to do something like this:
 This raises a question of identity. The React element may be different every time,
 but when does it refer to the same host instance conceptually?
 
-If an element type in the same place in the tree “matches up” between the previous and the next renders,
-React reuses the existing host instance.
+**If an element type in the same place in the tree “matches up” between the previous and the next renders,
+React reuses the existing host instance.**
 
 ![img_3.png](img_3.png)
 
