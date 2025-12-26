@@ -99,7 +99,7 @@ React first decides whether to re-use the <dialog>, and then repeats this decisi
 This is not great because conceptually the `<input>` hasn’t been replaced with `<p>` — it just moved.
 We don’t want to lose its selection, focus state, and content due to re-creating the DOM.
 
-In practice, you would rarely call ReactDOM.render directly.
+In practice, you would rarely call `ReactDOM.render` directly.
 Instead, React apps tend to be broken down into functions like this:
 
 ![img_6.png](img_6.png)
@@ -117,6 +117,8 @@ With dynamic lists, we can’t be sure the order is ever the same:
 If the list of our shopping items is ever re-ordered,
 React will see that all p and input elements inside have the same type,
 and won’t know to move them. (From React’s point of view, the items themselves changed, not their order.)
+
+![img_21.png](img_21.png)
 
 So instead of re-ordering them, React would effectively update each of them.
 This can create performance issues and possible bugs.
