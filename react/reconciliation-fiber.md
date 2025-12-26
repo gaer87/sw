@@ -115,6 +115,8 @@ If the list of our shopping items is ever re-ordered,
 React will see that all p and input elements inside have the same type,
 and won’t know to move them. (From React’s point of view, the items themselves changed, not their order.)
 
+![img_14.png](img_14.png)
+
 So instead of re-ordering them, React would effectively update each of them.
 This can create performance issues and possible bugs.
 For example, the content of the first input would stay reflected in first input after the sort
@@ -127,6 +129,81 @@ This is why React nags you to specify a special property called key every time y
 A key tells React that it should consider an item to be conceptually the same
 even if it has different positions inside its parent element between renders.
 
-When React sees <p key="42"> inside a <form>, it will check if the previous render also contained <p key="42"> inside the same <form>.
+When React sees `<p key="42">` inside a `<form>`, it will check if the previous render also contained `<p key="42">` inside the same `<form>`.
 This works even if <form> children changed their order. React will reuse the previous host instance with the same key if it exists,
 and re-order the siblings accordingly.
+
+## Components
+
+![img_15.png](img_15.png)
+
+### Recursion
+
+How do we use components from other components? Components are functions so we could call them:
+
+![img_16.png](img_16.png)
+
+However, this is not the idiomatic way to use components in the React runtime.
+
+Instead, the idiomatic way to use a component is with the same mechanism we’ve already seen before — React elements.
+**This means that you don’t directly call the component function, but instead let React later do it for you:**
+
+![img_17.png](img_17.png)
+
+And somewhere inside React, your component will be called:
+
+![img_18.png](img_18.png)
+
+Okay, so what does React do when an element type is a function?
+**It calls your component, and asks what element that component wants to render.**
+
+This process continues recursively.
+
+You: `ReactDOM.render(<App />, domContainer)`
+React: Hey `App`, what do you render to?
+App: I render `<Layout>` with `<Content>` inside.
+React: Hey `Layout`, what do you render to?
+Layout: I render my children in a `<div>`. My child was `<Content>` so I guess that goes into the `<div>`.
+React: Hey `<Content>`, what do you render to?
+Content: I render an `<article>` with some text and a `<Footer>` inside.
+React: Hey `<Footer>`, what do you render to?
+Footer: I render a `<footer>` with some more text.
+React: Okay, here you go:
+
+![img_19.png](img_19.png)
+
+This is why we say reconciliation is recursive. When React walks the element tree,
+it might meet an element whose type is a component. It will call it and keep descending down the tree of returned React elements.
+Eventually, we’ll run out of components, and React will know what to change in the host tree.
+
+The same reconciliation rules we already discussed apply here too.
+If the type at the same position (as determined by index and optional key) changes,
+React will throw away the host instances inside, and re-create them.
+
+### Inversion of Control
+
+You might be wondering: why don’t we just call components directly? Why write `<Form />` rather than `Form()`?
+
+**React can do its job better if it “knows” about your components rather than
+if it only sees the React element tree after recursively calling them.**
+
+![img_20.png](img_20.png)
+
+This is a classic example of [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control).
+There’s a few interesting properties we get by letting React take control of calling our components:
+
+- **Components become more than functions.** 
+  React can augment component functions with features like local state that are tied to the component identity in the tree.
+  If you called components directly, you’d have to build these features yourself.
+
+- **Component types participate in the reconciliation.** 
+  By letting React call your components, you also tell it more about the conceptual structure of your tree.
+  For example, when you move from rendering `<Feed>` to the `<Profile>` page, React won’t attempt to re-use host instances inside them
+  — just like when you replace `<button>` with a `<p>`. All state will be gone — which is usually good when you render a conceptually different view.
+
+- **React can delay the reconciliation.**
+  If React takes control over calling our components, it can do many interesting things. For example,
+  it can let the browser do some work between the component calls so that re-rendering a large component tree doesn’t block the main thread.
+
+- **A better debugging story.** 
+  If components are first-class citizens that the library is aware of, we can build rich developer tools for introspection in development.
