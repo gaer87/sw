@@ -133,7 +133,7 @@ A key tells React that it should consider an item to be conceptually the same
 even if it has different positions inside its parent element between renders.
 
 When React sees `<p key="42">` inside a `<form>`, it will check if the previous render also contained `<p key="42">` inside the same `<form>`.
-This works even if <form> children changed their order. React will reuse the previous host instance with the same key if it exists,
+This works even if `<form>` children changed their order. React will reuse the previous host instance with the same key if it exists,
 and re-order the siblings accordingly.
 
 ## Components
