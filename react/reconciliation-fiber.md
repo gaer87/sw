@@ -212,3 +212,31 @@ There’s a few interesting properties we get by letting React take control of c
 
 - **A better debugging story.** 
   If components are first-class citizens that the library is aware of, we can build rich developer tools for introspection in development.
+
+**Lazy Evaluation** 
+
+When we call functions in JavaScript, arguments are evaluated before the call:
+
+![img_22.png](img_22.png)
+
+However, React components are relatively pure.
+There is absolutely no need to execute it if we know its result won’t get rendered on the screen.
+
+![img_23.png](img_23.png)
+
+![img_24.png](img_24.png)
+
+![img_25.png](img_25.png)
+
+If we called Comments() as a function, it would execute immediately 
+regardless of whether Page wants to render them or not:
+
+![img_26.png](img_26.png)
+
+![img_27.png](img_27.png)
+
+This lets React decide when and whether to call it. If our Page component ignores its children prop
+and renders `<h1>Please log in</h1>` instead, React won’t even attempt to call the Comments function.
+
+This is good because it both lets us avoid unnecessary rendering work that would be thrown away,
+and makes the code less fragile. 
