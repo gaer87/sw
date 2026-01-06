@@ -261,3 +261,25 @@ This is because React can’t know whether an update in the parent would affect 
 React intentionally doesn’t memoize components by default.
 Many components always receive different props so memoizing them would be a **net loss**.
 
+## Raw Models
+
+Ironically, React doesn’t use a “reactivity” system for fine-grained updates. In other words,
+any update at the top triggers reconciliation instead of updating just the components affected by changes.
+
+This is an intentional design decision. [Time to interactive](https://calibreapp.com/blog/time-to-interactive/)
+is a crucial metric in consumer web applications, and traversing models to set up fine-grained listeners
+spends that precious time. Additionally, in many apps, interactions tend to result either in small (button hover)
+or large (page transition) updates, in which case fine-grained subscriptions are a waste of memory resources.
+
+One of the core design principles of React is that it works with raw data. If you have a bunch of JavaScript objects
+received from the network, you can pump them directly into your components with no preprocessing.
+
+React rendering is **O(view size)** rather than **O(model size)**, and you can significantly cut the view size
+with [windowing](https://react-window.now.sh/#/examples/list/fixed-size).
+
+There are some kinds of applications where fine-grained subscriptions are beneficial — such as stock tickers.
+This is a rare example of “everything constantly updating at the same time”. React might not be the best fit for this
+use case. Still, you can implement your own fine-grained subscription system on top of React.
+
+Note that there are common performance issues that even fine-grained subscriptions and “reactivity” systems can’t solve.
+For example, rendering a new deep tree (which happens on every page transition) without blocking the browser.
