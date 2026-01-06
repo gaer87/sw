@@ -240,3 +240,24 @@ and renders `<h1>Please log in</h1>` instead, React won’t even attempt to call
 
 This is good because it both lets us avoid unnecessary rendering work that would be thrown away,
 and makes the code less fragile. 
+
+## Consistency (последовательность)
+
+Even if we want to  the reconciliation process itself into **non-blocking chunks** of work,
+we should still perform the actual host tree operations in a **single synchronous swoop**.
+
+React splits all work into the “render phase” and the “commit phase”.
+Render phase is when React calls your components and performs reconciliation. It is safe to interrupt
+and in the future will be asynchronous.
+Commit phase is when React touches the host tree. It is always synchronous.
+
+## Memoization
+
+When a parent schedules an update by calling `setState`, by default React reconciles its whole child subtree.
+This is because React can’t know whether an update in the parent would affect the child or not.
+
+![img_28.png](img_28.png)
+
+React intentionally doesn’t memoize components by default.
+Many components always receive different props so memoizing them would be a **net loss**.
+
